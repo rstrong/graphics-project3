@@ -35,8 +35,8 @@ float frand();
 
 /* screen stuff */
 
-int xsize = 30;
-int ysize = 30;
+int xsize = 64;
+int ysize = 48;
 int psize = 4;
 
 /* simulation variables */
