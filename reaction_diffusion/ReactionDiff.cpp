@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <GL/glut.h>
 #include "ReactionDiff.h"
 
 
@@ -145,24 +146,29 @@ void ReactionDiff::run_stripe(void)
 
 void ReactionDiff::run(void)
 {
-  int k = 0;
-  int iterations = 999999999;
-  for(k = 0; k < iterations; k++)
+  if(TYPE == 1)
   {
-    if(TYPE == 1)
-    {
-      display(a);
-      run_stripe();
-    }
+    run_stripe();
+    update_min_max(a);
   }
 }
 
-void ReactionDiff::display(float values[MAX][MAX])
+float ReactionDiff::get_min(void)
+{
+  return min;
+}
+
+float ReactionDiff::get_max(void)
+{
+  return max;
+}
+
+void ReactionDiff::update_min_max(float values[MAX][MAX])
 {
   int i,j;
   float output;
-  float min =  1e20;
-  float max = -1e20;
+  float mn =  1e20;
+  float mx = -1e20;
 
   /* find minimum and maximum values */
 
@@ -170,32 +176,30 @@ void ReactionDiff::display(float values[MAX][MAX])
   {
     for (j = 0; j < ysize; j++) 
     {
-      if (values[i][j] < min)
+      if (values[i][j] < mn)
       {
-        min = values[i][j];
+        mn = values[i][j];
       }
-      if (values[i][j] > max)
+      if (values[i][j] > mx)
       {
-        max = values[i][j];
+        mx = values[i][j];
       }
     }
   }
 
-  if (min == max) 
+  if (mn == mx) 
   {
-    min = max - 1;
-    max = min + 2;
+    mn = mx - 1;
+    mx = mn + 2;
   }
+  min = mn;
+  max = mx;
+}
 
-  
-  /* display the values */
-
-  for (i = 0; i < xsize; i++)
-    for (j = 0; j < ysize; j++) {
-      output = (values[i][j] - min) / (max - min);
-      output = output * 255.0;
-      printf("WRITE PIXEL (%d,%d) value -> %d\n",i,j,(int)output);
-      //writepixel (i, j, (int) output);
-    }
-
+float ReactionDiff::get(int i,int j)
+{
+  if(TYPE == 1)
+  {
+    return a[i][j];
+  }
 }

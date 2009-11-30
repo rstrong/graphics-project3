@@ -24,6 +24,8 @@ class ReactionDiff
   float dd[MAX][MAX];
   float de[MAX][MAX];
 
+  float min,max;
+
   public:
     ReactionDiff();
     void init(int,float);
@@ -33,9 +35,12 @@ class ReactionDiff
     void set_arand(float);
     float frand(float, float);
     void run_stripe(void);
-    void display(float[MAX][MAX]);
+    void update_min_max(float[MAX][MAX]);
     void calculate_semistable(void);
     void run(void);
+    float get(int,int);
+    float get_min(void);
+    float get_max(void);
 };
 
 #endif
