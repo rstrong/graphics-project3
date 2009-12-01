@@ -1,0 +1,12 @@
+int WIDTH = 400;
+int HEIGHT = 400;
+ReactionDiff rd;
+int iter = 0;
+int MODE = 0;
+int N = 1;
+float dp1 = 0.04;
+float dp2 = 0.06;
+float dp3 = 0.04;
+float df1 = 0.009;
+float df2 = 0.2;
+void main_keyboard(unsigned char, int, int);

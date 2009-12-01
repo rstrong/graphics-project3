@@ -8,12 +8,8 @@
 
 // The beginnings of ours...
 #include <ReactionDiff.h>
-
-
-int WIDTH = 640;
-int HEIGHT = 480;
-ReactionDiff rd;
-int iter = 0;
+#include <driver.h>
+#include <menu.h>
 
 void main_reshape(int width, int height)
 {
@@ -29,18 +25,25 @@ void main_reshape(int width, int height)
 
 void main_display()
 {
-  iter++;
-  if(iter % 1000 == 0)
+  if(iter % 100 == 0)
   {
     std::cout << "iteration " << iter << std::endl;
   }
-  rd.run();
+  if(MODE < 2)
+  {
+    for(unsigned int f = 0; f < N; f++)
+    {
+      iter++;
+      rd.run();
+    }
+  }
+
   float mn,mx,output;
   int i,j;
   mn = rd.get_min();
   mx = rd.get_max();
   glClear(GL_COLOR_BUFFER_BIT);
-  glPointSize(1.0f);
+  glPointSize(2.0f);
   glBegin(GL_POINTS);
   for (i = 0; i < 200; i++)
   {
@@ -48,8 +51,8 @@ void main_display()
     {
       output = (rd.get(i,j) - mn) / (mx - mn);
       output = output * 255.0;
-      glColor3ub((int)output,0,0);
-      glVertex3f(i,j,0);
+      glColor3ub(0,0,(int)output);
+      glVertex3f((i*2+1),(j*2+1),0);
     }
   }
   glEnd();
@@ -57,25 +60,70 @@ void main_display()
 
 }
 
+void special_keyboard(int key, int x, int y)
+{
+  switch(key)
+  {
+  default:
+    break;
+  }
+}
 void main_keyboard(unsigned char key, int x, int y)
 {
   switch(key)
   {
-    case 'u' : 
+    case 'q' : 
+      dp1 += 0.01;
+      std::cout << "p1 is now " << dp1 << std::endl;
       break;
-    case 'i' :
+    case 'Q' : 
+      dp1 -= 0.01;
+      std::cout << "p1 is now " << dp1 << std::endl;
       break;
-    case 'j' :
+    case 'w' : 
+      dp2 += 0.01;
+      std::cout << "p2 is now " << dp2 << std::endl;
       break;
-    case 'k' : 
+    case 'W' : 
+      dp2 -= 0.01;
+      std::cout << "p2 is now " << dp2 << std::endl;
       break;
-    case 'n' :
+    case 'e' : 
+      dp3 += 0.01;
+      std::cout << "p3 is now " << dp3 << std::endl;
       break;
-    case 'm' : 
+    case 'E' : 
+      dp3 -= 0.01;
+      std::cout << "p3 is now " << dp3 << std::endl;
       break;
+    case 'r' :
+      df1 += 0.001;
+      std::cout << "diff1 is now " << df1 << std::endl;
+      break;
+    case 'R' :
+      df1 -= 0.001;
+      std::cout << "diff1 is now " << df1 << std::endl;
+      break;
+    case 't' :
+      df2 += 0.01;
+      std::cout << "diff2 is now " << df2 << std::endl;
+      break;
+    case 'T' :
+      df2 -= 0.01;
+      std::cout << "diff2 is now " << df2 << std::endl;
+      break;
+    case 32 :
+      if(MODE == 2)
+      {
+        std::cout << "iterating via spacebar" << std::endl;
+        rd.run();
+        iter++;
+      }
     default:
       break;
   }
+  rd.set_p(dp1,dp2,dp3);
+  rd.set_diff(df1,df2);
   main_reshape(WIDTH, HEIGHT);
 }
 
@@ -88,8 +136,8 @@ void init(void)
 {
   rd.init(1,1.0);
   rd.set_size(200,200);
-  rd.set_p(0.04,0.06,0.04);
-  rd.set_diff(0.009,0.2);
+  rd.set_p(dp1,dp2,dp3);
+  rd.set_diff(df1,df2);
   rd.set_arand(0.02);
   rd.calculate_semistable();
 }
@@ -97,19 +145,19 @@ main(int argc, char** argv)
 {
   rd.init(1,1.0);
   init();
-  std::cout << "made it past init" << std::endl;
   glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
   glutInitWindowSize(WIDTH, HEIGHT);
   glutInitWindowPosition(50, 50);
   glutInit(&argc, argv);
 
-  int window = glutCreateWindow("Demo");
+  int window = glutCreateWindow("Reaction Diffusion");
   glutReshapeFunc(main_reshape);
   glutDisplayFunc(main_display);
   glutKeyboardFunc(main_keyboard);
   glutIdleFunc(idle);
-
-
+  setup_menus();
+  glutKeyboardFunc(main_keyboard);
+  glutSpecialFunc(special_keyboard);
 
   glutMainLoop();
 
