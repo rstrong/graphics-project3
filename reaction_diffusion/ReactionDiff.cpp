@@ -17,6 +17,12 @@ void ReactionDiff::init(int type, float s)
   TYPE = type;
   speed = s;
 }
+
+void ReactionDiff::set_binit(float in)
+{
+  beta_init = in;
+}
+
 void ReactionDiff::set_size(int x, int y)
 {
   xsize = x;
@@ -74,8 +80,21 @@ void ReactionDiff::calculate_semistable(void)
   }
   if(TYPE == 2)
   {
-    // todo
+    for (i = 0; i < xsize; i++)
+    {
+      for (j = 0; j < ysize; j++) 
+      {
+        a[i][j] = 4;
+        b[i][j] = 4;
+        c[i][j] = beta_init + frand (-beta_rand, beta_rand);
+      }
+    }
   }
+}
+
+void ReactionDiff::set_brand(float in)
+{
+  beta_rand = in;
 }
 
 float ReactionDiff::frand(float min, float max)
@@ -141,7 +160,54 @@ void ReactionDiff::run_stripe(void)
       e[i][j] += (speed * de[i][j]);
     }
   }
+}
 
+void ReactionDiff::run_spot(void)
+{
+  int i,j;
+  int iprev,inext,jprev,jnext;
+  float aval,bval;
+  float ka;
+  float dda,ddb;
+  float Diff1,Diff2;
+
+  Diff1 = diff1 / 2.0;
+  Diff2 = diff2 / 2.0;
+  ka = p1 / 16.0;
+
+  for (i = 0; i < xsize; i++) 
+  {
+    iprev = (i + xsize - 1) % xsize;
+    inext = (i + 1) % xsize;
+
+    for (j = 0; j < ysize; j++) 
+    {
+      jprev = (j + ysize - 1) % ysize;
+      jnext = (j + 1) % ysize;
+
+      aval = a[i][j];
+      bval = b[i][j];
+
+      dda = a[i][jprev] + a[i][jnext] + a[iprev][j] + a[inext][j] - 4 * aval;
+      ddb = b[i][jprev] + b[i][jnext] + b[iprev][j] + b[inext][j] - 4 * bval;
+
+      da[i][j] = ka * (16 - aval * bval) + Diff1 * dda;
+      db[i][j] = ka * (aval * bval - bval - c[i][j]) + Diff2 * ddb;
+    }
+  }
+
+  for (i = 0; i < xsize; i++)
+  {
+    for (j = 0; j < ysize; j++) 
+    {
+      a[i][j] += (speed * da[i][j]);
+      b[i][j] += (speed * db[i][j]);
+      if (b[i][j] < 0)
+      {
+        b[i][j] = 0;
+      }
+    }
+  }
 }
 
 void ReactionDiff::run(void)
@@ -150,6 +216,11 @@ void ReactionDiff::run(void)
   {
     run_stripe();
     update_min_max(a);
+  }
+  if(TYPE == 2)
+  {
+    run_spot();
+    update_min_max(b);
   }
 }
 
@@ -201,5 +272,9 @@ float ReactionDiff::get(int i,int j)
   if(TYPE == 1)
   {
     return a[i][j];
+  }
+  if(TYPE == 2)
+  {
+    return b[i][j];
   }
 }

@@ -11,6 +11,8 @@ class ReactionDiff
   float diff1, diff2;
   float arand;
   float speed;
+  float beta_rand;
+  float beta_init;
 
   float a[MAX][MAX];
   float b[MAX][MAX];
@@ -32,9 +34,12 @@ class ReactionDiff
     void set_size(int, int);
     void set_p(float, float, float);
     void set_diff(float, float);
+    void set_brand(float);
+    void set_binit(float);
     void set_arand(float);
     float frand(float, float);
     void run_stripe(void);
+    void run_spot(void);
     void update_min_max(float[MAX][MAX]);
     void calculate_semistable(void);
     void run(void);
