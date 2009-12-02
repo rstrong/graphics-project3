@@ -31,7 +31,7 @@ void main_display()
   }
   if(MODE < 2)
   {
-    for(unsigned int f = 0; f < N; f++)
+    for(int f = 0; f < N; f++)
     {
       iter++;
       rd.run();
@@ -112,6 +112,14 @@ void main_keyboard(unsigned char key, int x, int y)
       df2 -= 0.01;
       std::cout << "diff2 is now " << df2 << std::endl;
       break;
+    case 'y' :
+      br += 0.01;
+      std::cout << "beta rand is now " << br << std::endl;
+      break;
+    case 'Y' :
+      br -= 0.01;
+      std::cout << "beta rand is now " << br << std::endl;
+      break;
     case 32 :
       if(MODE == 2)
       {
@@ -139,6 +147,8 @@ void init(void)
   rd.set_p(dp1,dp2,dp3);
   rd.set_diff(df1,df2);
   rd.set_arand(0.02);
+  rd.set_brand(br);
+  rd.set_binit(12);
   rd.calculate_semistable();
 }
 main(int argc, char** argv)

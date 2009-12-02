@@ -58,8 +58,80 @@ void reset(int option)
   }
 }
 
+void change_mode(int option)
+{
+  if(option == 0)
+  {
+    rd.init(1,1.0);
+    dp1 = 0.04;
+    dp2 = 0.06;
+    dp3 = 0.04;
+    df1 = 0.009;
+    df2 = 0.2;
+    std::cout << "Type is now stripe" << std::endl;
+  }
+  if(option == 1)
+  {
+    rd.init(2,1.0);
+    dp1 = 0.8;
+    dp2 = 0;
+    dp3 = 0;
+    df1 = 0.25;
+    df2 = 0.0625;
+    std::cout << "Type is now spot" << std::endl;
+  }
+  rd.set_p(dp1,dp2,dp3);
+  rd.set_diff(df1,df2);
+  rd.calculate_semistable();
+}
+
+void predefined(int option)
+{
+  if(option == 0)
+  {
+    rd.init(1,1.0);
+    dp1 = 0.04;
+    dp2 = 0.06;
+    dp3 = 0.04;
+    df1 = 0.009;
+    df2 = 0.2;
+    std::cout << "default stripes" << std::endl;
+  }
+  if(option == 1)
+  {
+    rd.init(1,1.0);
+    dp1 = 0.04;
+    dp2 = 0.06;
+    dp3 = 0.04;
+    df1 = 0.122;
+    df2 = 0.2;
+    std::cout << "large stripes" << std::endl;
+  }
+  if(option == 2)
+  {
+    rd.init(2,1.0);
+    dp1 = 0.16;
+    dp2 = 0;
+    dp3 = 0;
+    df1 = 0.25;
+    df2 = 0.0625;
+    std::cout << "defautl dots" << std::endl;
+  }
+  rd.set_p(dp1,dp2,dp3);
+  rd.set_diff(df1,df2);
+  rd.calculate_semistable();
+}
+
 void setup_menus(void)
 {
+  int sub_type = glutCreateMenu(change_mode);
+  glutAddMenuEntry("Stripes", 0);
+  glutAddMenuEntry("Spots", 1);
+  int def = glutCreateMenu(predefined);
+  glutAddMenuEntry("Small Stripes", 0);
+  glutAddMenuEntry("Large Stripes" , 1);
+  glutAddMenuEntry("Small Dots", 2);
+  glutAddMenuEntry("Larger Dots", 3);
   int sub_mode = glutCreateMenu(set_mode);
   glutAddMenuEntry("Standard (fast iteration)", 0);
   glutAddMenuEntry("N - Step", 1);
@@ -72,11 +144,14 @@ void setup_menus(void)
   int sub_reset = glutCreateMenu(reset);
   glutAddMenuEntry("No", 0);
   glutAddMenuEntry("Confirm", 1);
-
+  
   glutCreateMenu(menu);
+  glutAddSubMenu("Diffusion Mode", sub_type);
+  glutAddSubMenu("Examples", def);
   glutAddSubMenu("Step Mode", sub_mode);
   glutAddSubMenu("N", sub_n);
   glutAddSubMenu("Restart", sub_reset);
+
 
   glutAttachMenu(GLUT_RIGHT_BUTTON);
     

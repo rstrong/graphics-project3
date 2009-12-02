@@ -9,4 +9,5 @@ float dp2 = 0.06;
 float dp3 = 0.04;
 float df1 = 0.009;
 float df2 = 0.2;
+float br = 0.1;
 void main_keyboard(unsigned char, int, int);
