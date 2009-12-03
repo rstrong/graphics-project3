@@ -1,0 +1,8 @@
+Rick Strong
+CSE 598 Project 2
+
+Instructions:
+
+run 'make' on any linux system with GL, GLU, and glut libs, then run ./project2
+
+Arrow keys move car; right click brings up menu.
