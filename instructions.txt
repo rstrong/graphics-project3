@@ -1,0 +1,8 @@
+Project 3 - Rick Strong
+Graphics
+
+to run: run make on any linux system with gl glu and glut libraries.
+
+Project: arrow keys move cars
+
+Reation Diffusion: right click for menu, q, w, e, r, t, y modify various diffusion options.
