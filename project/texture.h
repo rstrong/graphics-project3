@@ -11,6 +11,7 @@ void load_grass(void)
 
   glGenTextures(1, &TexObj1);
   glEnable(GL_TEXTURE_2D);
+  gluBuild2DMipmaps(GL_TEXTURE_2D,3,32,32,GL_RGB,GL_UNSIGNED_BYTE, &TexObj1);
   glBindTexture(GL_TEXTURE_2D, TexObj1);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // must set to 1 for compact data
   if(MAG_OPTION == 0)
@@ -59,6 +60,7 @@ void load_stone(void)
 
   glGenTextures(1, &TexObj2);
   glEnable(GL_TEXTURE_2D);
+  gluBuild2DMipmaps(GL_TEXTURE_2D,3,32,32,GL_RGB,GL_UNSIGNED_BYTE, &TexObj2);
   glBindTexture(GL_TEXTURE_2D, TexObj2);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // must set to 1 for compact data
   if(MAG_OPTION == 0)
@@ -107,6 +109,7 @@ void load_beech(void)
 
   glGenTextures(1, &TexObj3);
   glEnable(GL_TEXTURE_2D);
+  gluBuild2DMipmaps(GL_TEXTURE_2D,3,32,32,GL_RGB,GL_UNSIGNED_BYTE, &TexObj3);
   glBindTexture(GL_TEXTURE_2D, TexObj3);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // must set to 1 for compact data
   if(MAG_OPTION == 0)
